@@ -1,7 +1,7 @@
 import AppHeader from "../appHeader/AppHeader";
-import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
+import RandomCharacter from "../randomCharacter/RandomCharacter";
+import CharacterList from "../characterList/CharacterList";
+import CharacterInfo from "../characterInfo/CharacterInfo";
 
 import decoration from "../../img/vision.png";
 
@@ -10,10 +10,10 @@ const App = () => {
     <div className="app">
       <AppHeader />
       <main>
-        <RandomChar />
-        <div className="char__content">
-          <CharList />
-          <CharInfo />
+        <RandomCharacter />
+        <div className="character__content">
+          <CharacterList />
+          <CharacterInfo />
         </div>
         <img className="bg-decoration" src={decoration} alt="vision" />
       </main>

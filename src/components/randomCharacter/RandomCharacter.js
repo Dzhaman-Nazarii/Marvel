@@ -1,11 +1,11 @@
 import { Component } from "react";
 
-import "./RandomChar.scss";
+import "./RandomCharacter.scss";
 import mjolnir from "../../img/mjolnir.png";
 
 import MarvelService from "../../services/MarvelService";
 
-class RandomChar extends Component {
+class RandomCharacter extends Component {
   constructor(props) {
     super(props);
     this.updateCharacter();
@@ -31,13 +31,13 @@ class RandomChar extends Component {
     } = this.state;
 
     return (
-      <div className="randomchar">
-        <div className="randomchar__block">
-          <img src={thumbnail} alt={name} className="randomchar__img" />
-          <div className="randomchar__info">
-            <p className="randomchar__name">{name}</p>
-            <p className="randomchar__descr">{description}</p>
-            <div className="randomchar__btns">
+      <div className="randomcharacter">
+        <div className="randomcharacter__block">
+          <img src={thumbnail} alt={name} className="randomcharacter__img" />
+          <div className="randomcharacter__info">
+            <p className="randomcharacter__name">{name}</p>
+            <p className="randomcharacter__descr">{description}</p>
+            <div className="randomcharacter__btns">
               <a href={homepage} className="button button__main">
                 <div className="inner">homepage</div>
               </a>
@@ -47,21 +47,25 @@ class RandomChar extends Component {
             </div>
           </div>
         </div>
-        <div className="randomchar__static">
-          <p className="randomchar__title">
+        <div className="randomcharacter__static">
+          <p className="randomcharacter__title">
             Random character for today!
             <br />
             Do you want to get to know him better?
           </p>
-          <p className="randomchar__title">Or choose another one</p>
+          <p className="randomcharacter__title">Or choose another one</p>
           <button className="button button__main">
             <div className="inner">try it</div>
           </button>
-          <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
+          <img
+            src={mjolnir}
+            alt="mjolnir"
+            className="randomcharacter__decoration"
+          />
         </div>
       </div>
     );
   }
 }
 
-export default RandomChar;
+export default RandomCharacter;

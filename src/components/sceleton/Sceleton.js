@@ -3,7 +3,7 @@ import "./Skeleton.scss";
 const Skeleton = () => {
   return (
     <>
-      <p className="char__select">
+      <p className="character__select">
         Please select a character to see information
       </p>
       <div className="skeleton">
