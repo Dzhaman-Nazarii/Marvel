@@ -8,10 +8,6 @@ import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 
 class RandomCharacter extends Component {
-  constructor(props) {
-    super(props);
-    this.updateCharacter();
-  }
   state = {
     character: {},
     loading: true,
@@ -19,6 +15,10 @@ class RandomCharacter extends Component {
   };
 
   marvelService = new MarvelService();
+
+  componentDidMount() {
+    this.updateCharacter();
+  }
 
   onCharacterLoaded = (character) => {
     this.setState({ character, loading: false });
@@ -57,7 +57,10 @@ class RandomCharacter extends Component {
             Do you want to get to know him better?
           </p>
           <p className="randomcharacter__title">Or choose another one</p>
-          <button className="button button__main">
+          <button
+            onClick={this.updateCharacter}
+            className="button button__main"
+          >
             <div className="inner">try it</div>
           </button>
           <img
@@ -73,9 +76,21 @@ class RandomCharacter extends Component {
 
 const View = ({ character }) => {
   const { name, description, thumbnail, homepage, wiki } = character;
+  let imgStyle = { objectFit: "cover" };
+  if (
+    thumbnail ===
+    "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+  ) {
+    imgStyle = { objectFit: "contain" };
+  }
   return (
     <div className="randomcharacter__block">
-      <img src={thumbnail} alt={name} className="randomcharacter__img" />
+      <img
+        src={thumbnail}
+        style={imgStyle}
+        alt={name}
+        className="randomcharacter__img"
+      />
       <div className="randomcharacter__info">
         <p className="randomcharacter__name">{name}</p>
         <p className="randomcharacter__descr">{description}</p>

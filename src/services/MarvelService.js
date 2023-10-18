@@ -19,9 +19,9 @@ class MarvelService {
     return res.data.results.map(this.transformCharacter);
   };
 
-  getCharacter = async (id) => {
+  getCharacter = async (characterId) => {
     const res = await this.getResource(
-      `${this.apiUrl}characters/${id}?apikey=${this.apiKey}`
+      `${this.apiUrl}characters/${characterId}?apikey=${this.apiKey}`
     );
     return this.transformCharacter(res.data.results[0]);
   };
@@ -31,7 +31,7 @@ class MarvelService {
       name: character.name,
       description: character.description
         ? `${character.description.slice(0, 210)}...`
-        : "Sorry, we don't have description about this character.",
+        : "Sorry, we don't have a description for this character.",
       thumbnail: character.thumbnail.path + "." + character.thumbnail.extension,
       homepage: character.urls[0].url,
       wiki: character.urls[1].url,
