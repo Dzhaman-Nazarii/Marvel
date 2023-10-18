@@ -14,9 +14,9 @@ class MarvelService {
 
   getAllCharacters = async () => {
     const res = await this.getResource(
-      `${this.apiUrl}characters?limit=10&offset=210&apikey=${this.apiKey}`
+      `${this.apiUrl}characters?apikey=${this.apiKey}`
     );
-    return res.data.results.map(this.transformCharacter);
+    return res.data.results.map(this.transrormListCharacter);
   };
 
   getCharacter = async (characterId) => {
@@ -24,6 +24,21 @@ class MarvelService {
       `${this.apiUrl}characters/${characterId}?apikey=${this.apiKey}`
     );
     return this.transformCharacter(res.data.results[0]);
+  };
+
+  getCharacterList = async () => {
+    const res = await this.getResource(
+      `${this.apiUrl}characters?limit=9&offset=210&apikey=${this.apiKey}`
+    );
+    return res.data.results.map(this.transrormListCharacter);
+  };
+
+  transrormListCharacter = (character) => {
+    return {
+      id: character.id,
+      name: character.name,
+      thumbnail: character.thumbnail.path + "." + character.thumbnail.extension,
+    };
   };
 
   transformCharacter = (character) => {
