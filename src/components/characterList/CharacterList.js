@@ -25,7 +25,11 @@ class CharacterList extends Component {
       <div className="character__list">
         <ul className="character__grid">
           {this.state.characters.map(({ id, name, thumbnail }) => (
-            <li key={id} className="character__item">
+            <li
+              key={id}
+              onClick={() => this.props.onCharacterSelected(id)}
+              className="character__item"
+            >
               <img src={thumbnail} alt={name} />
               <div className="character__name">{name}</div>
             </li>
