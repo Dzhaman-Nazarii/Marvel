@@ -25,6 +25,16 @@ class CharacterInfo extends Component {
     }
   }
 
+  updateDetailCharacter = () => {
+    const { characterId } = this.props;
+    if (!characterId) return;
+    this.onCharacterLoading();
+    this.marvelService
+      .getCharacter(characterId)
+      .then(this.onCharacterLoaded)
+      .catch(this.onError);
+  };
+
   onCharacterLoaded = (character) => {
     this.setState({ character, loading: false });
   };
@@ -35,16 +45,6 @@ class CharacterInfo extends Component {
 
   onError = () => {
     this.setState({ loading: false, error: true });
-  };
-
-  updateDetailCharacter = () => {
-    const { characterId } = this.props;
-    if (!characterId) return;
-    this.onCharacterLoading();
-    this.marvelService
-      .getCharacter(characterId)
-      .then(this.onCharacterLoaded)
-      .catch(this.onError);
   };
 
   render() {
