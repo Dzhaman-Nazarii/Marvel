@@ -10,25 +10,42 @@ class CharacterList extends Component {
     characters: [],
     loading: true,
     error: false,
+    loadingMore: false,
+    offset: 210,
+    characterEnded: false,
   };
 
   marvelService = new MarvelService();
 
   componentDidMount() {
-    this.onLoadedList();
+    this.onRequest();
   }
 
-  onLoadedList = () => {
-    this.marvelService.getCharacterList().then((data) => {
-      this.setState({ characters: data, loading: false });
-    });
+  onRequest = (offset) => {
+    this.onLoadingMore();
+    this.marvelService
+      .getCharacterList(offset)
+      .then(this.onCharacterListLoaded)
+      .catch(this.onError);
   };
 
-  onCharacterListLoaded = (characters) => {
-    this.setState({
-      characters,
+  onLoadingMore = () => {
+    this.setState({ loadingMore: true });
+  };
+
+  onCharacterListLoaded = (newCharacters) => {
+    let ended = false;
+    if (newCharacters.length > 9) {
+      ended = true;
+    }
+
+    this.setState(({ offset, characters }) => ({
+      characters: [...characters, ...newCharacters],
       loading: false,
-    });
+      loadingMore: false,
+      offset: offset + 9,
+      characterEnded: ended,
+    }));
   };
 
   onError = () => {
@@ -39,26 +56,33 @@ class CharacterList extends Component {
   };
 
   render() {
-    const { characters, loading, error } = this.state;
+    const { characters, loading, error, loadingMore, offset, characterEnded } =
+      this.state;
 
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading ? <Spinner /> : null;
-    const characterItems = characters.map(({ id, name, thumbnail }) => (
+    const characterItems = characters.map((item, i) => (
       <li
-        key={id}
-        onClick={() => this.props.onCharacterSelected(id)}
+        key={i}
+        onClick={() => this.props.onCharacterSelected(item.id)}
         className="character__item"
       >
-        <img src={thumbnail} alt={name} />
-        <div className="character__name">{name}</div>
+        <img src={item.thumbnail} alt={item.name} />
+        <div className="character__name">{item.name}</div>
       </li>
     ));
 
     return (
       <div className="character__list">
         <ul className="character__grid">{characterItems}</ul>
-        <button className="button button__main button__long">
-          <div className="inner">Завантажити ще</div>
+        <button
+          className="button button__main button__long"
+          disabled={loadingMore}
+          style={{ display: characterEnded ? "none" : "block" }}
+        >
+          <div className="inner" onClick={() => this.onRequest(offset)}>
+            Load more
+          </div>
         </button>
         {errorMessage}
         {spinner}
