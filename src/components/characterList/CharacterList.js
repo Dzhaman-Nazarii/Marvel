@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Component } from "react";
 import "./CharacterList.scss";
 
@@ -90,5 +91,9 @@ class CharacterList extends Component {
     );
   }
 }
+
+CharacterList.propTypes = {
+  onCharacterSelected: PropTypes.func,
+};
 
 export default CharacterList;
