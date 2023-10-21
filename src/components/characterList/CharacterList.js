@@ -1,96 +1,105 @@
 import PropTypes from "prop-types";
-import { Component } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./CharacterList.scss";
 
 import MarvelService from "../../services/MarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 
-class CharacterList extends Component {
-  state = {
-    characters: [],
-    loading: true,
-    error: false,
-    loadingMore: false,
-    offset: 210,
-    characterEnded: false,
-  };
+const CharacterList = (props) => {
+  const [characters, setCharacters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [offset, setOffset] = useState(120);
+  const [characterEnded, setCharacterEnded] = useState(false);
 
-  marvelService = new MarvelService();
+  const marvelService = new MarvelService();
 
-  componentDidMount() {
-    this.onRequest();
-  }
+  useEffect(() => {
+    onRequest();
+  }, []);
 
-  onRequest = (offset) => {
-    this.onLoadingMore();
-    this.marvelService
+  const onRequest = (offset) => {
+    onLoadingMore();
+    marvelService
       .getCharacterList(offset)
-      .then(this.onCharacterListLoaded)
-      .catch(this.onError);
+      .then(onCharacterListLoaded)
+      .catch(onError);
   };
 
-  onLoadingMore = () => {
-    this.setState({ loadingMore: true });
+  const onLoadingMore = () => {
+    setLoadingMore(true);
   };
 
-  onCharacterListLoaded = (newCharacters) => {
+  const onCharacterListLoaded = (newCharacters) => {
     let ended = false;
     if (newCharacters.length > 9) {
       ended = true;
     }
 
-    this.setState(({ offset, characters }) => ({
-      characters: [...characters, ...newCharacters],
-      loading: false,
-      loadingMore: false,
-      offset: offset + 9,
-      characterEnded: ended,
-    }));
+    setCharacters((characters) => [...characters, ...newCharacters]);
+    setOffset((offset) => offset + 9);
+    setLoadingMore(false);
+    setLoading(false);
+    setCharacterEnded((characterEnded) => ended);
   };
 
-  onError = () => {
-    this.setState({
-      error: true,
-      loading: false,
-    });
+  const onError = () => {
+    setError(true);
+    setLoading(false);
   };
 
-  render() {
-    const { characters, loading, error, loadingMore, offset, characterEnded } =
-      this.state;
+  const itemsRefs = useRef([]);
 
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const characterItems = characters.map((item, i) => (
-      <li
-        key={i}
-        onClick={() => this.props.onCharacterSelected(item.id)}
-        className="character__item"
-      >
-        <img src={item.thumbnail} alt={item.name} />
-        <div className="character__name">{item.name}</div>
-      </li>
-    ));
-
-    return (
-      <div className="character__list">
-        <ul className="character__grid">{characterItems}</ul>
-        <button
-          className="button button__main button__long"
-          disabled={loadingMore}
-          style={{ display: characterEnded ? "none" : "block" }}
-        >
-          <div className="inner" onClick={() => this.onRequest(offset)}>
-            Load more
-          </div>
-        </button>
-        {errorMessage}
-        {spinner}
-      </div>
+  const focusOnItem = (id) => {
+    itemsRefs.current.forEach((item) =>
+      item.classList.remove("character__item_selected")
     );
-  }
-}
+    itemsRefs.current[id].classList.add("character__item_selected");
+    itemsRefs.current[id].focus();
+  };
+
+  const errorMessage = error ? <ErrorMessage /> : null;
+  const spinner = loading ? <Spinner /> : null;
+  const characterItems = characters.map((item, i) => (
+    <li
+      ref={(el) => (itemsRefs.current[i] = el)}
+      key={item.id}
+      onClick={() => {
+        props.onCharacterSelected(item.id);
+        focusOnItem(i);
+      }}
+      onKeyPress={(e) => {
+        if (e.key === " " || e.key === "Enter") {
+          props.onCharacterSelected(item.id);
+          focusOnItem(i);
+        }
+      }}
+      className="character__item"
+    >
+      <img src={item.thumbnail} alt={item.name} />
+      <div className="character__name">{item.name}</div>
+    </li>
+  ));
+
+  return (
+    <div className="character__list">
+      <ul className="character__grid">{characterItems}</ul>
+      <button
+        className="button button__main button__long"
+        disabled={loadingMore}
+        style={{ display: characterEnded ? "none" : "block" }}
+      >
+        <div className="inner" onClick={() => onRequest(offset)}>
+          Load more
+        </div>
+      </button>
+      {errorMessage}
+      {spinner}
+    </div>
+  );
+};
 
 CharacterList.propTypes = {
   onCharacterSelected: PropTypes.func,
