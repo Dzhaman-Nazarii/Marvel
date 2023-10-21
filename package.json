@@ -2,6 +2,7 @@
   "name": "marvel",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Dzhaman-Nazarii.github.io/Marvel/",
   "dependencies": {
     "prop-types": "^15.8.1",
     "react": "^18.1.0",
