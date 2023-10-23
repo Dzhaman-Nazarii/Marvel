@@ -4,6 +4,7 @@ import RandomCharacter from "../randomCharacter/RandomCharacter";
 import CharacterList from "../characterList/CharacterList";
 import CharacterInfo from "../characterInfo/CharacterInfo";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
+import ComicsList from "../comicsList/ComicsList";
 
 import decoration from "../../img/vision.png";
 
@@ -18,6 +19,9 @@ const App = () => {
     <div className="app">
       <AppHeader />
       <main>
+        <ErrorBoundary>
+          <ComicsList />
+        </ErrorBoundary>
         <ErrorBoundary>
           <RandomCharacter />
         </ErrorBoundary>
