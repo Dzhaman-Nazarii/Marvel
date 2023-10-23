@@ -2,34 +2,25 @@ import PropTypes from "prop-types";
 import { useState, useEffect, useRef } from "react";
 import "./CharacterList.scss";
 
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 
 const CharacterList = (props) => {
   const [characters, setCharacters] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [offset, setOffset] = useState(120);
   const [characterEnded, setCharacterEnded] = useState(false);
 
-  const marvelService = new MarvelService();
+  const { loading, error, getCharacterList } = useMarvelService();
 
   useEffect(() => {
     onRequest();
   }, []);
 
   const onRequest = (offset) => {
-    onLoadingMore();
-    marvelService
-      .getCharacterList(offset)
-      .then(onCharacterListLoaded)
-      .catch(onError);
-  };
-
-  const onLoadingMore = () => {
     setLoadingMore(true);
+    getCharacterList(offset).then(onCharacterListLoaded);
   };
 
   const onCharacterListLoaded = (newCharacters) => {
@@ -41,13 +32,7 @@ const CharacterList = (props) => {
     setCharacters((characters) => [...characters, ...newCharacters]);
     setOffset((offset) => offset + 9);
     setLoadingMore(false);
-    setLoading(false);
     setCharacterEnded((characterEnded) => ended);
-  };
-
-  const onError = () => {
-    setError(true);
-    setLoading(false);
   };
 
   const itemsRefs = useRef([]);
