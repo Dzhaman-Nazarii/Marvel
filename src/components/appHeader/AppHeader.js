@@ -1,26 +1,38 @@
+import { Link, NavLink } from "react-router-dom";
 import "./AppHeader.scss";
 
 const AppHeader = () => {
   return (
     <header className="app__header">
       <h1 className="app__title">
-        <a href="https://uk.wikipedia.org/wiki/%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B0">
+        <Link to="/">
           <span>Marvel</span> information portal
-        </a>
+        </Link>
       </h1>
       <nav className="app__menu">
         <ul>
           <li>
-            <a href="https://uk.wikipedia.org/wiki/%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B0">
+            <NavLink
+              end
+              style={({ isActive }) => ({
+                color: isActive ? "#9F0013" : "#232222",
+              })}
+              to="/"
+            >
               Characters
-            </a>
-          </li>
+            </NavLink>
+          </li>{" "}
           /
           <li>
-            <a href="https://uk.wikipedia.org/wiki/%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B0">
+            <NavLink
+              style={({ isActive }) => ({
+                color: isActive ? "#9F0013" : "#232222",
+              })}
+              to="/comics"
+            >
               Comics
-            </a>
-          </li>
+            </NavLink>
+          </li>{" "}
         </ul>
       </nav>
     </header>

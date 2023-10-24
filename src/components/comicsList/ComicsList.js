@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./ComicsList.scss";
 
 import useMarvelService from "../../services/MarvelService";
@@ -36,17 +37,13 @@ const ComicsList = () => {
 
   const errorMessage = error ? <ErrorMessage /> : null;
   const spinner = loading ? <Spinner /> : null;
-  const comicsItems = comics.map((item, i) => (
-    <li key={i} className="comics__item">
-      <a href="https://uk.wikipedia.org/wiki/%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B0">
-        <img
-          src={item.thumbnail}
-          alt={item.title}
-          className="comics__item-img"
-        />
-        <div className="comics__item-name">{item.title}</div>
-        <div className="comics__item-price">{item.price}</div>
-      </a>
+  const comicsItems = comics.map(({ id, title, thumbnail, price }) => (
+    <li key={id} className="comics__item">
+      <Link to={`/comics/${id}`}>
+        <img src={thumbnail} alt={title} className="comics__item-img" />
+        <div className="comics__item-name">{title}</div>
+        <div className="comics__item-price">{price}</div>
+      </Link>
     </li>
   ));
 

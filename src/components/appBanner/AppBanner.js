@@ -1,4 +1,4 @@
-import "./appBanner.scss";
+import "./AppBanner.scss";
 import avengers from "../../img/Avengers.png";
 import avengersLogo from "../../img/Avengers_logo.png";
 
